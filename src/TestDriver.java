@@ -17,141 +17,18 @@ import topology.TopologyModel;
 public class TestDriver {
 
 	public static void main(String[] args){
-		testSOM();
+		
 	}
 	
-	
-	private static void testSOM(){
-		int numRowsCols = 15;
+	private void runSOMOnOurDataset(){
+		SOMFacade som = new SOMFacade();
+		
 		int numAttributes = 64;
-		int numIterations = 10;
-		int startingRadius = numRowsCols/2;
-		double learningRate = 0.5;
-		double decay = 1;
-		
-		TopologyModel topology = new MatrixTopology(numRowsCols, numRowsCols, startingRadius);
-		
 		double[] maxWeights = new double[numAttributes];
 		for(int i=0;i<numAttributes; i++)
 			maxWeights[i] = 16;
 		
-		
-		DefaultNetwork network = new DefaultNetwork(numAttributes, maxWeights, topology);
-		
-		LearningFactorFunctionalModel learningFactor = new GaussFunctionalFactor(learningRate);
-//		LearningFactorFunctionalModel learningFactor =new ExponentionalFunctionFactor(learningRate, decay);
-		GaussNeighbourhoodFunction gaussNeighborhood = new GaussNeighbourhoodFunction(startingRadius);
-		
-		LearningData datasetWOClass = new LearningData("data/dataset_wo_class.csv");
-		WTMLearningFunction learning = new WTMLearningFunction(network,numIterations,new EuclidesMetric(),datasetWOClass, learningFactor, gaussNeighborhood);
-		learning.setShowComments(true);
-		learning.learn();
-		network.networkToFile("output.txt");
-		
-		LearningData datasetWClass = new LearningData("data/dataset.csv");
-		LinkedList<LinkedList<String>> classNetwork = convertToClasses(network, datasetWClass);
-		
-		System.out.print(convertToString(classNetwork));
-	}
-	
-	private static String convertToString(LinkedList<LinkedList<String>> network){
-		StringBuilder sb = new StringBuilder();
-		
-		for(int i=0; i<network.size(); i++){
-			LinkedList<String> currRow = network.get(i);
-			for(int j=0;j<currRow.size(); j++){
-				if(j > 0)
-					sb.append(" ");
-				sb.append(currRow.get(j));
-			}
-			sb.append("\n");
-		}
-		
-		return sb.toString();
-	}
-	
-	private static LinkedList<LinkedList<String>> convertToClasses(NetworkModel network, LearningData dataset){
-		int nRows = network.getTopology().getRowNumber();
-		int nCols = network.getTopology().getColNumber();
-		
-		LinkedList<LinkedList<String>> classNetwork = new LinkedList<LinkedList<String>>();
-		
-		for(int i=0; i<nRows; i++){
-			
-			LinkedList<String> row = new LinkedList<String>();
-			
-			for(int j=0; j<nCols; j++){
-				NeuronModel currNeuron = network.getNeuron(i*nCols+j);
-				int nearestClass = getClassOfNearestInstance(dataset, currNeuron.getWeight());
-				row.add(nearestClass+"");
-			}
-			
-			classNetwork.add(row);
-		}
-		
-		return classNetwork;
-	}
-	
-	private static int getClassOfNearestInstance(LearningData dataset, double[] testInstanceWithoutClass){
-		if(dataset.getDataSize() == 0)
-			return -1;
-		
-		int nearestIndex = 0;
-		double currNearestDistance = calculateEuclideanDistance(removeLastIndex(dataset.getData(0)), testInstanceWithoutClass);
-		
-		for(int i=1; i<dataset.getDataSize(); i++){
-			double[] currInstanceWithoutClass = removeLastIndex(dataset.getData(i));
-			double currEuclideanDistance = calculateEuclideanDistance(currInstanceWithoutClass, testInstanceWithoutClass);
-
-			if(currEuclideanDistance < currNearestDistance ){
-				currNearestDistance = currEuclideanDistance;
-				nearestIndex = i;
-			}
-		}
-		
-		//return nearestIndex;
-		
-//		System.out.println("-------------------");
-//		System.out.println(convertToString(testInstanceWithoutClass));
-//		System.out.println("is nearest to");
-//		System.out.println(convertToString(dataset.getData(nearestIndex)));
-//		System.out.println("with a distance of "+currNearestDistance);
-//		System.out.println("-------------------");
-		
-		int nearestClass = (int) Math.round( dataset.getData(nearestIndex)[dataset.getVectorSize()-1] );
-		
-		return nearestClass;
-		
-	}
-	
-	private static String convertToString(double[] array){
-		StringBuilder sb = new StringBuilder();
-		
-		for(int i=0;i <array.length; i++)
-			sb.append(array[i]+" ");
-		return sb.toString();
-	}
-	
-	private static double[] removeLastIndex(double[] array){
-		double[] newArray = new double[array.length-1];
-		for(int i=0;i<array.length-1;i++){
-			newArray[i] = array[i];
-		}
-		return newArray;
-	}
-	
-	private static double calculateEuclideanDistance(double[] instance1, double[] instance2){
-		if(instance1.length != instance2.length){
-			return -1;
-		}
-		double sumOfSquares = 0;
-		int length = instance1.length;
-		
-		for(int i=0; i<length; i++){
-			sumOfSquares += Math.pow(instance1[i] - instance2[i], 2);
-		}
-		
-		return Math.sqrt(sumOfSquares);
+		som.testSOM(numAttributes,maxWeights,"data/dataset_wo_class.csv", "data/dataset.csv", "OursOutput.txt" );
 	}
 	
 }
