@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 
 import kohonen.LearningData;
@@ -26,7 +27,9 @@ public class SOMFacade {
 	public SOMFacade(){
 		this.numRows = 15;
 		this.numCols = 15;
-		this.numIterations = 15;
+		recalculateRadius();
+		
+		this.numIterations = 10;
 		this.learningRate = 0.5;
 	}
 	
@@ -54,7 +57,7 @@ public class SOMFacade {
 	
 	
 	//Remember to call the setters if you don't want the default parameters
-	public void testSOM(int numAttributes, double[] maxWeights, String inputFileWithoutClass, String inputFileWithClass, String outputFileName){
+	public DefaultNetwork testSOM(int numAttributes, double[] maxWeights, String inputFileWithoutClass, String inputFileWithClass, String outputFileName){
 		
 		TopologyModel topology = new MatrixTopology(this.numRows, this.numCols, startingRadius);
 		DefaultNetwork network = new DefaultNetwork(numAttributes, maxWeights, topology);
@@ -76,14 +79,56 @@ public class SOMFacade {
 		
 			FileWriter fw = new FileWriter(new File(outputFileName), true);
 			String stringForm = convertToString(classNetwork);
-		
+			
+			transferToHtmlFile(stringForm);
 			System.out.print(stringForm);
 			fw.append(stringForm);
 			fw.close();
 		
 		}catch(Exception e){e.printStackTrace();}
+	
+		return network;
 	}
 	
+	private void transferToHtmlFile(String stringForm) throws IOException {
+		FileWriter fw = new FileWriter(new File("SOM_results.html"));
+		String resultString = createColoredString(stringForm);
+		fw.append("<html> \n <title></title> <body><p>" + resultString + "\n </p></body> </html>");
+		fw.close();
+	}
+
+	private String createColoredString(String stringForm) {
+		String resultString = "";
+		String[] lines = stringForm.split("\n");
+		for(String line: lines){
+			String[] numbers = line.split(" ");
+			for(String number: numbers){
+				if(number.equals("0"))
+					resultString += "<span style='color:green'>0</span> ";
+				else if(number.equals("1"))
+					resultString += "<span style='color:red'>1</span> ";
+				else if(number.equals("2"))
+					resultString += "<span style='color:blue'>2</span> ";
+				else if(number.equals("3"))
+					resultString += "<span style='color:orange'>3</span> ";
+				else if(number.equals("4"))
+					resultString += "<span style='color:yellow'>4</span> ";
+				else if(number.equals("5"))
+					resultString += "<span style='color:#CC00FF'>5</span> ";
+				else if(number.equals("6"))
+					resultString += "<span style='color:black'>6</span> ";
+				else if(number.equals("7"))
+					resultString += "<span style='color:#00FFFF'>7</span> ";
+				else if(number.equals("8"))
+					resultString += "<span style='color:#6A5ACD'>8</span> ";
+				else if(number.equals("9"))
+					resultString += "<span style='color:#00FF7F'>9</span> ";
+			}
+			resultString += "<br>";
+		}
+		return resultString;
+	}
+
 	private String convertToString(LinkedList<LinkedList<String>> network){
 		StringBuilder sb = new StringBuilder();
 		
@@ -122,7 +167,7 @@ public class SOMFacade {
 		return classNetwork;
 	}
 	
-	private int getClassOfNearestInstance(LearningData dataset, double[] testInstanceWithoutClass){
+	public static int getClassOfNearestInstance(LearningData dataset, double[] testInstanceWithoutClass){
 		if(dataset.getDataSize() == 0)
 			return -1;
 		
@@ -130,7 +175,7 @@ public class SOMFacade {
 		double currNearestDistance = calculateEuclideanDistance(removeLastIndex(dataset.getData(0)), testInstanceWithoutClass);
 		
 		for(int i=1; i<dataset.getDataSize(); i++){
-			double[] currInstanceWithoutClass = removeLastIndex(dataset.getData(i));
+			double[] currInstanceWithoutClass =  removeLastIndex(dataset.getData(i));
 			double currEuclideanDistance = calculateEuclideanDistance(currInstanceWithoutClass, testInstanceWithoutClass);
 
 			if(currEuclideanDistance < currNearestDistance ){
@@ -162,7 +207,7 @@ public class SOMFacade {
 		return sb.toString();
 	}
 	
-	private double[] removeLastIndex(double[] array){
+	private static double[] removeLastIndex(double[] array){
 		double[] newArray = new double[array.length-1];
 		for(int i=0;i<array.length-1;i++){
 			newArray[i] = array[i];
@@ -170,7 +215,7 @@ public class SOMFacade {
 		return newArray;
 	}
 	
-	private double calculateEuclideanDistance(double[] instance1, double[] instance2){
+	private static double calculateEuclideanDistance(double[] instance1, double[] instance2){
 		if(instance1.length != instance2.length){
 			return -1;
 		}
