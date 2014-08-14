@@ -6,15 +6,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import converters.DigitsNeuronsToInstancesConverter;
-import converters.NeuronsToInstancesConverter;
 import som.SOMFacade;
 import som.labeler.NearestNeighborLabeler;
 import som.labeler.SOMNetworkLabeler;
 import som.network.DefaultNetwork;
+import weka.core.Instances;
+import converters.DigitsNeuronsToInstancesConverter;
+import converters.NeuronsToInstancesConverter;
 import datasets.DatasetManager;
 import datasets.DatasetManagerFactory;
-import weka.core.Instances;
 
 public class TestDriver {
 
@@ -32,7 +32,7 @@ public class TestDriver {
 	SOMFacade som = new SOMFacade();
 	som.setNumIterations(10);
 
-	int numAttributes = 64;
+	int numAttributes = digitsDM.getNumAttributes();
 	double[] maxWeights = new double[numAttributes];
 	for (int i = 0; i < numAttributes; i++)
 	    maxWeights[i] = 16;
