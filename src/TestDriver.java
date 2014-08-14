@@ -30,9 +30,11 @@ public class TestDriver {
 
 	// Run SOM
 	SOMFacade som = new SOMFacade();
+	som.setRows(20);
+	som.setCols(20);
 	som.setNumIterations(10);
 
-	int numAttributes = digitsDM.getNumAttributes();
+	int numAttributes = digitsDM.getNumAttributesWithoutClass();
 	double[] maxWeights = new double[numAttributes];
 	for (int i = 0; i < numAttributes; i++)
 	    maxWeights[i] = 16;
@@ -45,7 +47,7 @@ public class TestDriver {
 	Instances instances = digitsConverter.convert(network, "Digits");
 
 	// Label the nodes in the network
-	SOMNetworkLabeler somLabeler = new NearestNeighborLabeler();
+	SOMNetworkLabeler somLabeler = new NearestNeighborLabeler(8);
 	LinkedList<LinkedList<String>> labeledSOM = somLabeler.labelNetwork(
 		network, digitsDM);
 

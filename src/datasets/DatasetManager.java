@@ -1,4 +1,5 @@
 package datasets;
+
 import som.kohonen.LearningData;
 
 public class DatasetManager {
@@ -22,8 +23,12 @@ public class DatasetManager {
 	return dataWithoutClass;
     }
 
-    public int getNumAttributes() {
+    public int getNumAttributesOriginal() {
 	return dataOriginal.getVectorSize();
+    }
+
+    public int getNumAttributesWithoutClass() {
+	return dataWithoutClass.getVectorSize();
     }
 
     public double[] getRow(int index) {

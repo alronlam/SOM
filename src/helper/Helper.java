@@ -1,4 +1,5 @@
 package helper;
+
 import java.util.LinkedList;
 
 public class Helper {
@@ -51,16 +52,19 @@ public class Helper {
 	return sb.toString();
     }
 
-    public static void insertInOrder(LinkedList<Double> list, double val) {
+    public static LinkedList<Double> insertInOrder(LinkedList<Double> list, double val) {
+	LinkedList<Double> newList = new LinkedList<Double>(list);
+
 	int index = 0;
-	for (int i = 0; i < list.size(); i++) {
-	    if (val < list.get(i)) {
+	for (int i = 0; i < newList.size(); i++) {
+	    if (val < newList.get(i)) {
 		index = i;
 		break;
 	    }
 	}
 
-	list.add(index, val);
-    }
+	newList.add(index, val);
 
+	return newList;
+    }
 }
