@@ -1,9 +1,19 @@
+import htmlgenerator.DigitsHTMLGenerator;
+import htmlgenerator.HTMLGenerator;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import network.DefaultNetwork;
+import converters.DigitsNeuronsToInstancesConverter;
+import converters.NeuronsToInstancesConverter;
+import som.SOMFacade;
+import som.labeler.NearestNeighborLabeler;
+import som.labeler.SOMNetworkLabeler;
+import som.network.DefaultNetwork;
+import datasets.DatasetManager;
+import datasets.DatasetManagerFactory;
 import weka.core.Instances;
 
 public class TestDriver {

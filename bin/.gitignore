@@ -2,3 +2,10 @@
 /NearestNeighborLabeler.class
 /SOMFacade.class
 /SOMNetworkLabeler.class
+/NeuronsToInstancesConverter.class
+/datasets/
+/helper/
+/kohonen/
+/network/
+/htmlgenerator/
+/converters/
