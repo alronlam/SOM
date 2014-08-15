@@ -4,7 +4,7 @@ import weka.core.FastVector;
 import datasets.DatasetManagerFactory;
 
 
-public class DigitsNeuronsToInstancesConverter extends NeuronsToInstancesConverter{
+public class InternetNeuronsToInstancesConverter extends NeuronsToInstancesConverter{
 
     @Override
     protected FastVector createTweetAttributes() {
@@ -13,7 +13,7 @@ public class DigitsNeuronsToInstancesConverter extends NeuronsToInstancesConvert
 	
         FastVector attributes = new FastVector(numAttributes);
         for(int i=1;i<=numAttributes;i++){
-        	Attribute currSegmentAttribute = new Attribute("Segment"+i);
+        	Attribute currSegmentAttribute = new Attribute("Attribute "+i);
         	attributes.addElement(currSegmentAttribute);
         }
         
@@ -22,7 +22,7 @@ public class DigitsNeuronsToInstancesConverter extends NeuronsToInstancesConvert
 
     @Override
     protected int getNumAttributes() {
-	return DatasetManagerFactory.create(DatasetManagerFactory.DIGITS).getNumAttributesWithoutClass();
+	return DatasetManagerFactory.create(DatasetManagerFactory.INTERNET).getNumAttributesWithoutClass();
     }
 
 }

@@ -42,7 +42,7 @@ public class SOMFacade {
 	this.numIterations = iterations;
     }
 
-    public void setLearningRate(int rate) {
+    public void setLearningRate(double rate) {
 	this.learningRate = rate;
     }
 

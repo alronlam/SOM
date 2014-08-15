@@ -72,13 +72,16 @@ public class NearestNeighborLabeler implements SOMNetworkLabeler {
 	}
 
 	// get the majority class in the k-nearest neighbors
-	HashMap<String, Double> classCount = new HashMap<String, Double>();
+	HashMap<String, Integer> classCount = new HashMap<String, Integer>();
+	int currWeight = k;
 	for (DistanceIndexPair neighbor : neighbors) {
-	    String neighborClass = "" + (int) Math.round(datasetManager.getClassOf(neighbor.index));
+	    String neighborClass = datasetManager.getClassOf(neighbor.index);
 	    if (classCount.containsKey(neighborClass))
-		classCount.put(neighborClass, classCount.get(neighborClass) + neighbor.distance);
+		classCount.put(neighborClass, classCount.get(neighborClass) + currWeight);
 	    else
-		classCount.put(neighborClass, neighbor.distance);
+		classCount.put(neighborClass, currWeight);
+	
+	    currWeight--;
 	}
 
 	double max = -1;

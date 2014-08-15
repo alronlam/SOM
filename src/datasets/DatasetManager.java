@@ -43,8 +43,8 @@ public class DatasetManager {
 	return dataOriginal.getDataSize();
     }
 
-    public double getClassOf(int index) {
-	return dataOriginal.getData(index)[classIndex];
+    public String getClassOf(int index) {
+	return ""+Math.round(dataOriginal.getData(index)[classIndex]);
     }
 
 }
