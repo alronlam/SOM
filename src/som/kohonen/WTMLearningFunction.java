@@ -35,6 +35,7 @@
  */
 package som.kohonen;
 import java.util.Iterator;
+import java.util.TreeMap;
 
 import som.learningFactorFunctional.LearningFactorFunctionalModel;
 import som.metrics.MetricModel;
@@ -42,9 +43,7 @@ import som.network.NetworkModel;
 import som.network.NeuronModel;
 import som.topology.NeighbourhoodFunctionModel;
 import som.topology.TopologyModel;
-
-import java.util.ArrayList;
-import java.util.TreeMap;
+import drivers.TestDriver;
 
 /**
  * <I>Winner Takes Most</I> - algorytm where winnig neuron and neurons in neighboorhood
@@ -315,6 +314,13 @@ public class WTMLearningFunction {
      * @param iteration iteration number
      */
     public void changeWeight(int neuronNumber,double[] vector, int iteration){
+	
+	//decay the neighborhood radius
+	if(TestDriver.useRadiusDecay){
+	    double newRadius = TestDriver.initialNeighborhoodRadius * Math.exp(-1*iteration/TestDriver.neighborhoodLambda);
+	    topology.setRadius((int)Math.round(newRadius));
+	}
+	
         TreeMap neighboorhood = topology.getNeighbourhood(neuronNumber);
         Iterator it = neighboorhood.keySet().iterator();
         int neuronNr;

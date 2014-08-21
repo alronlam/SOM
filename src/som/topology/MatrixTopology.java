@@ -165,7 +165,7 @@ public class MatrixTopology implements TopologyModel {
 
         int[] temp = null;
         int   key;
-
+        
         for (int i = 0; i < radius; i++) {
             neighborgoodConn = getN(tempConnection);
 
@@ -179,7 +179,7 @@ public class MatrixTopology implements TopologyModel {
 
             tempConnection = (java.util.ArrayList) neighborgoodConn.clone();
         }
-
+        //System.out.println(neuronNumber+" - "+radius);
         return neighbornhood;
     }
 

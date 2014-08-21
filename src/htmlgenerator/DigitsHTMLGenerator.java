@@ -7,9 +7,9 @@ public class DigitsHTMLGenerator implements HTMLGenerator {
 	    LinkedList<LinkedList<String>> labeledSOM) {
 
 	StringBuilder sb = new StringBuilder();
-	sb.append("<html> \n <title></title> <body><p>");
+	sb.append("<html> \n <title></title> <body> <table border='1'>");
 	sb.append(createColoredString(clusters, labeledSOM));
-	sb.append("\n </p></body> </html>");
+	sb.append("\n </table></body> </html>");
 
 	return sb.toString();
     }
@@ -25,6 +25,8 @@ public class DigitsHTMLGenerator implements HTMLGenerator {
 
 	    LinkedList<String> currRow = labeledSOM.get(i);
 
+	    sb.append("<tr>");
+	    
 	    for (int j = 0; j < numCols; j++) {
 
 		String category = currRow.get(j);
@@ -32,47 +34,47 @@ public class DigitsHTMLGenerator implements HTMLGenerator {
 		int currNeuronIndex = i * numCols + j;
 		int clusterNum = clusters[currNeuronIndex];
 
-		sb.append("<span style='color:");
+		sb.append("<td style='color:");
 
 		switch (clusterNum) {
 		case 0:
-		    sb.append("red");
+		    sb.append("#E74C3C");
 		    break;
 		case 1:
-		    sb.append("orange");
+		    sb.append("#D35400");
 		    break;
 		case 2:
-		    sb.append("yellow");
+		    sb.append("#F1C40F");
 		    break;
 		case 3:
-		    sb.append("green");
+		    sb.append("#1ABC9C");
 		    break;
 		case 4:
-		    sb.append("blue");
+		    sb.append("#2ECC71");
 		    break;
 		case 5:
-		    sb.append("violet");
+		    sb.append("#3498DB");
 		    break;
 		case 6:
-		    sb.append("brown");
+		    sb.append("#9B59B6");
 		    break;
 		case 7:
-		    sb.append("gray");
+		    sb.append("#2C3E50");
 		    break;
 		case 8:
-		    sb.append("black");
+		    sb.append("#7F8C8D");
 		    break;
 		case 9:
-		    sb.append("cyan");
+		    sb.append("#ECF0F1");
 		    break;
 		}
 
 		sb.append("'>");
 		sb.append(category);
-		sb.append("</span> ");
+		sb.append("</td> ");
 	    }
 
-	    sb.append("<br>");
+	    sb.append("</tr>");
 	}
 	return sb.toString();
     }
